@@ -58,10 +58,11 @@ function renderPosts(posts) {
       return `
       <div class="photo-card">
         <div class="gallery">
-          <a class="gallery__item" href="${largeImageURL}">
+          <a class="gallery__item" data-ligthbox="images" href="${largeImageURL}">
             <img class="gallery__image" src="${webformatURL}" alt="${tags}" loading="lazy" />
           </a>
         </div>
+        
         <div class="info">
           <p class="info-item">
             <b>Likes</b>
@@ -96,3 +97,4 @@ let gallery = new SimpleLightbox('.gallery a', {
   captionsData: 'alt',
   captionDelay: 250,
 });
+
