@@ -9,8 +9,6 @@ const refs = {
   galleryDiv: document.querySelector('.gallery'),
   loadMoreBTN: document.querySelector('.load-more'),
   endtxt: document.querySelector('.endText'),
-  formData: {},
-  lastPageCounter: 0,
   errorText: 'Sorry, there are no images matching your search query. Please try again.',
 };
 
@@ -18,6 +16,9 @@ const newsApiService = new NewsApiService();
 
 refs.form.addEventListener('submit', onFormSubmit);
 refs.loadMoreBTN.addEventListener('click', onLoadMore);
+
+let lightbox = new SimpleLightbox({elements: '.gallery a'});
+
 // console.log(refs.loadMoreBTN);
 // refs.loadMoreBTN.setAttribute('disabled', '');
 
@@ -57,10 +58,10 @@ function renderPosts(posts) {
     .map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => {
       return `
       <div class="photo-card">
-        <div class="gallery">
-          <a class="gallery__item" data-ligthbox="images" href="${largeImageURL}">
-            <img class="gallery__image" src="${webformatURL}" alt="${tags}" loading="lazy" />
-          </a>
+        <div class="gallery__item">
+        <a class="gallery__item" href="${largeImageURL}">
+        <img class="gallery__image" src="${webformatURL}" alt="${tags}" />
+        </a>
         </div>
         
         <div class="info">
@@ -92,9 +93,5 @@ function renderPosts(posts) {
   refs.galleryDiv.insertAdjacentHTML('beforeend', markup);
 }
 
-let gallery = new SimpleLightbox('.gallery a', {
-  captions: true,
-  captionsData: 'alt',
-  captionDelay: 250,
-});
+
 
