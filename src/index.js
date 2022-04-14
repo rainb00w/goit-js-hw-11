@@ -58,27 +58,38 @@ function renderPosts(posts) {
     .map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => {
       return `
       <div class="photo-card">
-        <div class="gallery__item">
-        <a class="gallery__item" href="${largeImageURL}">
-        <img class="gallery__image" src="${webformatURL}" alt="${tags}" />
-        </a>
-        </div>
-        
-        <div class="info">
-          <p class="info-item">
-            <b>Likes</b>
-            ${likes}
-          </p>
-          <p class="info-item">
-            <b>Views ${views}</b>
-          </p>
-          <p class="info-item">
-            <b>Comments ${comments} </b>
-          </p>
-          <p class="info-item">
-            <b>Downloads ${downloads} </b>
-          </p>
-        </div>
+        <img class="gallery__image" src="${webformatURL}" alt="${tags}" loading="lazy" />
+       
+  <ul class="info-list">
+    <li class="info-li">
+      <p class="info-item">
+        <b>Likes <br /></b>
+        ${likes}
+      </p>
+    </li>
+    <li class="info-li">
+      <p class="info-item">
+        <b>Views <br /></b>
+        ${views}
+      </p>
+    </li>
+    <li class="info-li">
+      <p class="info-item">
+        <b
+          >Comments <br />
+        </b>
+        ${comments}
+      </p>
+    </li>
+    <li class="info-li">
+      <p class="info-item">
+        <b
+          >Downloads <br />
+        </b>   
+        ${downloads}
+      </p>
+    </li>
+  </ul>
       </div>`;
     })
     .join('');
@@ -94,4 +105,11 @@ function renderPosts(posts) {
 }
 
 
+
+
+{/* <div class="gallery__item">
+<a class="gallery__item" href="${largeImageURL}">
+<img class="gallery__image" src="${webformatURL}" alt="${tags}" />
+</a>
+</div>  */}
 
