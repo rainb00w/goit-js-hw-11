@@ -1,28 +1,39 @@
+const axios = require('axios');
+const gallery = document.querySelector('.gallery');
+export default class PixabayPhotos {
+  constructor() {
+    this.searchValue = '';
+    this.page = 1;
+    this.dataTotalHits = 0;
+  }
 
+  async fetchPhotos() {
+    // console.log(this);
 
+    const url = `https://pixabay.com/api/?key=26652166-68919f4336d4ff6c386516ecc&q=${this.searchValue}&page=${this.page}&per_page=40&image_type=photo&orientation=horizontal&safesearch=true`;
+    this.page += 1;
+    const response = await axios.get(url);
+    return await response.data;
+  }
 
-function renderGallery (arrayOfImages) {
-    const markUp = arrayOfImages.map(
-        ({preview, original, description}) => 
-        `<div class="gallery__item">
-        <a class="gallery__item" href="${original}">
-        <img class="gallery__image" src="${preview}" alt="${description}" />
-      </a>
-        </div>`
-        ).join('');
+  resetPage() {
+    this.dataTotalHits = 0;
+    this.page = 1;
+    gallery.innerHTML = '';
+  }
 
-    imageContainer.insertAdjacentHTML('beforeend', markUp);
-};
+  get dataTotal() {
+    return this.dataTotalHits;
+  }
 
+  set dataTotal(newDataTotal) {
+    this.dataTotalHits = newDataTotal;
+  }
 
-{/* <div class="gallery">
-  <a href="images/image1.jpg"><img src="images/thumbs/thumb1.jpg" alt="" title=""/></a>
-    <a href="images/image2.jpg"><img src="images/thumbs/thumb2.jpg" alt="" title="Beautiful Image"/></a>
-</div>
-
-
-   <div class="gallery__item">
-        <a class="gallery__item" href="${largeImageURL}">
-        <img class="gallery__image" src="${webformatURL}" alt="${tags}" />
-      </a>
-        </div> */}
+  get searchQuery() {
+    return this.searchValue;
+  }
+  set searchQuery(newQuerry) {
+    this.searchValue = newQuerry;
+  }
+}

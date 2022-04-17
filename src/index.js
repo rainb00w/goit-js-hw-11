@@ -17,7 +17,6 @@ const newsApiService = new NewsApiService();
 refs.form.addEventListener('submit', onFormSubmit);
 refs.loadMoreBTN.addEventListener('click', onLoadMore);
 
-let lightbox = new SimpleLightbox({elements: '.gallery a'});
 
 // console.log(refs.loadMoreBTN);
 // refs.loadMoreBTN.setAttribute('disabled', '');
@@ -107,9 +106,11 @@ function renderPosts(posts) {
 
 
 
-{/* <div class="gallery__item">
-<a class="gallery__item" href="${largeImageURL}">
-<img class="gallery__image" src="${webformatURL}" alt="${tags}" />
-</a>
-</div>  */}
+// <div class="gallery__item">
+// <a class="gallery__item" href="${largeImageURL}">
+// <img class="gallery__image" src="${webformatURL}" alt="${tags}" />
+// </a>
+// </div>  
+
+// let lightbox = new SimpleLightbox({elements: '.gallery a'});
 
