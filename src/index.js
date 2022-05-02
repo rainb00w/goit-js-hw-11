@@ -1,7 +1,7 @@
 import './sass/main.scss';
 import Notiflix from 'notiflix';
-import NewsApiService from '../src/js/fetch';
-import SimpleLightbox from 'simplelightbox';
+import ImageApiService from '../src/js/fetch';
+import SimpleLightbox from "simplelightbox";
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const refs = {
@@ -12,28 +12,30 @@ const refs = {
   errorText: 'Sorry, there are no images matching your search query. Please try again.',
 };
 
-const newsApiService = new NewsApiService();
+const imageApiService = new ImageApiService();
+
+
+
 
 refs.form.addEventListener('submit', onFormSubmit);
 refs.loadMoreBTN.addEventListener('click', onLoadMore);
 
-
-// console.log(refs.loadMoreBTN);
-// refs.loadMoreBTN.setAttribute('disabled', '');
+// console.log(SimpleLightbox);
 
 function onFormSubmit(event) {
   event.preventDefault();
   refs.loadMoreBTN.classList.add('is-hidden');
   refs.endtxt.classList.add('is-hidden');
   refs.galleryDiv.innerHTML = '';
-  newsApiService.query = event.currentTarget.elements.searchQuery.value;
-  if (newsApiService.query === '') {
+  imageApiService.query = event.currentTarget.elements.searchQuery.value;
+  if (imageApiService.query === '') {
     return alert('Plese, enter some data');
   }
-  newsApiService.resetPage();
-  newsApiService.resetLastPage();
-  newsApiService
+  imageApiService.resetPage();
+  imageApiService.resetLastPage();
+  imageApiService
     .fetchArticles()
+    .then(Notifications)
     .then(renderPosts)
     .catch(error => {
       console.log(error);
@@ -42,9 +44,29 @@ function onFormSubmit(event) {
     });
 }
 
+function Notifications(info) {
+  console.log(info.data);
+  console.log(info.data.totalHits);
+  const totalH = info.data.totalHits;
+  imageApiService.lastPage = Math.ceil(totalH / 40);
+  if (imageApiService.page === 1 && info.data.totalHits > 0) {
+    // console.log(info.data.totalHits, '1 err');
+    Notiflix.Notify.success(`Hooray! We found ${totalH} images.`);
+  }
+  // console.log(this.lastPage);
+
+  if (info.data.totalHits === 0) {
+    // console.log('2 err');
+    throw Error(info.statusText);
+  }
+  imageApiService.incrementPage();
+  return info.data.hits;
+}
+
 function onLoadMore() {
-  newsApiService
+  imageApiService
     .fetchArticles()
+    .then(Notifications)
     .then(renderPosts)
     .catch(error => {
       console.log(error);
@@ -57,7 +79,11 @@ function renderPosts(posts) {
     .map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => {
       return `
       <div class="photo-card">
-        <img class="gallery__image" src="${webformatURL}" alt="${tags}" loading="lazy" />
+      <div class="gallery__container">
+      <a class="gallery__item" href="${largeImageURL}">
+      <img class="gallery__image" src="${webformatURL}" alt="${tags}" />
+      </a>
+      </div>
        
   <ul class="info-list">
     <li class="info-li">
@@ -95,22 +121,21 @@ function renderPosts(posts) {
 
   refs.loadMoreBTN.classList.remove('is-hidden');
 
-  if (newsApiService.lastPage === newsApiService.page - 1) {
+
+  if (imageApiService.lastPage === imageApiService.page - 1) {
     refs.endtxt.classList.remove('is-hidden');
     refs.loadMoreBTN.classList.add('is-hidden');
   }
 
   refs.galleryDiv.insertAdjacentHTML('beforeend', markup);
+
+  let gallery = new SimpleLightbox('.gallery a', {
+    captions: true,
+    captionsData: 'alt',
+    captionDelay: 250,
+  });
 }
 
 
 
-
-// <div class="gallery__item">
-// <a class="gallery__item" href="${largeImageURL}">
-// <img class="gallery__image" src="${webformatURL}" alt="${tags}" />
-// </a>
-// </div>  
-
-// let lightbox = new SimpleLightbox({elements: '.gallery a'});
 

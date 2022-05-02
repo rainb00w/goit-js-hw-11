@@ -3,7 +3,7 @@ import Notiflix from 'notiflix';
 const BASE_URL = 'https://pixabay.com/api/?key=26582400-238f4fc38707f184745ce0218&q';
 import axios from 'axios';
 
-export default class NewsApiService {
+export default class ImageApiService {
   constructor() {
     this.searchQuery = '';
     this.page = 1;
@@ -22,30 +22,9 @@ export default class NewsApiService {
           throw Error(res.statusText);
         }
         return res;
-      })
-      .then(info => {
-        // console.log(info.data);
-        console.log(info.data.totalHits);
-        const totalH = info.data.totalHits;
-        this.lastPage = Math.ceil(totalH / 40);
-        if (this.page === 1 && info.data.totalHits > 0){
-          // console.log(info.data.totalHits, '1 err');
-          Notiflix.Notify.success(`Hooray! We found ${totalH} images.`);
-  
-        }
-        // console.log(this.lastPage);
-
-        if (info.data.totalHits === 0) {
-          // console.log('2 err');
-            throw Error(info.statusText);
-        }
-        this.incrementPage();
-        return info.data.hits;
       });
   }
 
- 
-  
   incrementPage(){
       this.page += 1; 
   }
